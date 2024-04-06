@@ -1,0 +1,84 @@
+{
+  "root": true,
+  "plugins": ["@typescript-eslint", "import", "prettier"],
+  "extends": [
+    "airbnb-typescript/base",
+    "prettier",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/typescript"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.eslint.json"
+  },
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "import/no-extraneous-dependencies": "off",
+    "semi": "error",
+    "quotes": ["error", "single"]
+  },
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    },
+    {
+      "files": ["*.spec.ts"],
+      "rules": {
+        "import/no-extraneous-dependencies": "off"
+      }
+    },
+    {
+      "files": ["*.ts"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "comma-dangle": ["error", "always-multiline"],
+        "import/order": [
+          "error",
+          {
+            "newlines-between": "always",
+            "groups": ["builtin", "external", "parent", "sibling", "index"],
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            }
+          }
+        ],
+        "padding-line-between-statements": [
+          "error",
+          {
+            "blankLine": "always",
+            "prev": "import",
+            "next": "*"
+          },
+          {
+            "blankLine": "any",
+            "prev": "import",
+            "next": "import"
+          },
+          {
+            "blankLine": "always",
+            "prev": "import",
+            "next": [
+              "class",
+              "function",
+              "expression",
+              "const",
+              "let",
+              "var",
+              "export"
+            ]
+          },
+          { "blankLine": "always", "prev": "*", "next": "return" },
+          { "blankLine": "never", "prev": "*", "next": "function" },
+          { "blankLine": "never", "prev": "function", "next": "*" }
+        ],
+        "eol-last": ["error", "always"],
+        "require-await": "error",
+        "no-multi-spaces": "error"
+      }
+    }
+  ]
+}
