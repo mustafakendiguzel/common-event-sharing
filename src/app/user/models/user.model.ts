@@ -2,8 +2,8 @@ import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity('user')
 export class UserModel {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;

@@ -1,6 +1,8 @@
 import express from 'express';
 import { FileController } from './file.controller';
 import { FileService } from './file.service';
+import { verifyToken } from '../../helpers/middlewares/verify-user.middleware';
+import { validateMulter } from '../../helpers/middlewares/validate-multer.middleware';
 
 export class FileRouter {
   constructor(
@@ -11,9 +13,10 @@ export class FileRouter {
   getRouter() {
     const router = express.Router();
     router
-      .route('/upload')
+      .route('/upload/user-images')
       .post(
-        this.fileService.getMulterMiddleware(),
+        verifyToken,
+        validateMulter,
         this.fileController.save.bind(this.fileController)
       );
     return router;

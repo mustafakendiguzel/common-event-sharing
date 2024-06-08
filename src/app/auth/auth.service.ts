@@ -49,7 +49,7 @@ export class AuthService {
       throw new CustomError('JWT_SECRET must be provided', 400);
     }
 
-    var token = jwt.sign({ userId: user.id }, this.JWT_SECRET, {
+    var token = jwt.sign({ id: user.id }, this.JWT_SECRET, {
       expiresIn: this.JWT_EXPIRES_IN,
     });
 

@@ -5,6 +5,7 @@ import loadRouters from './loaders/routes';
 import { PostgreSqlService } from './libs/db/postgresql.service';
 import { getDataSource } from '../data.source';
 import { customErrorHandler } from './helpers/error-handle/handle.errors';
+import { verifyToken } from './helpers/middlewares/verify-user.middleware';
 
 dotenv.config();
 
