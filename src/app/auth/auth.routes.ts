@@ -4,6 +4,7 @@ import { RegisterRequest } from '../../libs/types/auth/requests/register.request
 import { validateRequest } from '../../helpers/middlewares/validate-request.middleware';
 import { plainToClass } from 'class-transformer';
 import { LoginRequest } from '../../libs/types/auth/requests/login.request';
+import { verifyToken } from '../../helpers/middlewares/verify-user.middleware';
 
 export class AuthRouter {
   constructor(private readonly authController: AuthController) {}
@@ -16,6 +17,7 @@ export class AuthRouter {
         validateRequest(RegisterRequest),
         this.authController.register.bind(this.authController)
       );
+
     router
       .route('/login')
 
@@ -23,6 +25,10 @@ export class AuthRouter {
         validateRequest(LoginRequest),
         this.authController.login.bind(this.authController)
       );
+
+    router
+      .route('/me')
+      .get(verifyToken, this.authController.getMe.bind(this.authController));
     return router;
   }
 }

@@ -17,7 +17,14 @@ export class FileRouter {
       .post(
         verifyToken,
         validateMulter,
-        this.fileController.save.bind(this.fileController)
+        this.fileController.uploadProfilePhoto.bind(this.fileController)
+      );
+
+    router
+      .route('/user-images/:fileName')
+      .get(
+        verifyToken,
+        this.fileController.getProfilePhoto.bind(this.fileController)
       );
     return router;
   }

@@ -1,21 +1,19 @@
 import multer from 'multer';
+import { AppDataSource } from '../../../data.source';
+import { ProfilePhotoModel } from './models/file.model';
+import { ProfilePhotoUploadRequest } from '../../libs/types/file/requests/profile-photo-upload.request';
 
 export class FileService {
   constructor() {}
 
-  public getMulterMiddleware() {
-    const storage = multer.diskStorage({
-      destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-      },
-      filename: function (req, file, cb) {
-        cb(null, file.originalname);
-      },
-    });
+  private readonly userRepository =
+    AppDataSource.getRepository(ProfilePhotoModel);
 
-    return multer({
-      storage: storage,
-      limits: { fieldSize: 10 * 1024 * 1024 },
-    }).array('files', 5);
+  public async uploadProfilePhoto(data: ProfilePhotoUploadRequest) {
+    try {
+      return await this.userRepository.save(data);
+    } catch (error) {
+      throw error;
+    }
   }
 }

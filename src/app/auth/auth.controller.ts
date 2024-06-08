@@ -23,4 +23,18 @@ export class AuthController {
       next(error);
     }
   }
+
+  public async getMe(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await this.authService.getMe(req.user.id);
+
+      if (!user) return res.status(404).json({ message: 'User not found' });
+
+      const { password, ...userWithoutPassword } = user;
+
+      return res.status(200).json(userWithoutPassword);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

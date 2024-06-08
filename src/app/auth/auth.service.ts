@@ -56,6 +56,14 @@ export class AuthService {
     return { accessToken: token };
   }
 
+  async getMe(id: string) {
+    const user = await this.userService.findOneBy({
+      where: { id },
+      relations: { profilePhotos: true },
+    });
+    return user;
+  }
+
   runPythonCode() {
     exec(
       'conda run -n py39 python  src/libs/face_recognition/detector.py --test -f src/libs/face_recognition/testing/1.jpg',

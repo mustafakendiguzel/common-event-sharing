@@ -6,10 +6,11 @@ import { UserModel } from './models/user.model';
 export class UserService {
   constructor() {}
 
+  private readonly userRepository = AppDataSource.getRepository(UserModel);
+
   public async create(data: Omit<RegisterRequest, 'confirmPassword'>) {
     try {
-      const userRepository = AppDataSource.getRepository(UserModel);
-      return await userRepository.save(data);
+      return await this.userRepository.save(data);
     } catch (error) {
       throw error;
     }
@@ -17,8 +18,7 @@ export class UserService {
 
   public async findOneBy(data: FindOneOptions<UserModel>) {
     try {
-      const userRepository = AppDataSource.getRepository(UserModel);
-      return await userRepository.findOne(data);
+      return await this.userRepository.findOne(data);
     } catch (error) {
       throw error;
     }

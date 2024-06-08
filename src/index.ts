@@ -6,6 +6,7 @@ import { PostgreSqlService } from './libs/db/postgresql.service';
 import { getDataSource } from '../data.source';
 import { customErrorHandler } from './helpers/error-handle/handle.errors';
 import { verifyToken } from './helpers/middlewares/verify-user.middleware';
+import path from 'path';
 
 dotenv.config();
 
@@ -20,6 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 const port = process.env.PORT || 3000;
 
 app.use(getDataSource(3000));
+
+app.use('/uploads', express.static(path.resolve('../uploads')));
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Welcome The Muti & Sude Final Project!');

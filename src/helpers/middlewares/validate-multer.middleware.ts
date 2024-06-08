@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import multer from 'multer';
 import fs from 'fs';
-import { join } from 'path';
+import path from 'path';
 
 export const validateMulter = (
   req: Request,
@@ -9,22 +9,20 @@ export const validateMulter = (
   next: NextFunction
 ) => {
   const {
-    path,
+    path: requestPath,
     user: { id: userId },
   } = req;
 
   let folderPath: string = '';
 
-  if (path.includes('/upload/user-images')) {
-    folderPath = join(__dirname, `../../uploads/user-images/${userId}`); // Ana dizini al ve klasör yolu oluştur
+  if (requestPath.includes('/upload/user-images')) {
+    folderPath = path.resolve(`./uploads/user-images/${userId}`);
   }
 
-  if (path.includes('/upload/event-images')) {
+  if (requestPath.includes('/upload/event-images')) {
     const { eventId } = req.body;
-    folderPath = join(__dirname, `../../uploads/event/${eventId}`); // Ana dizini al ve klasör yolu oluştur
+    folderPath = path.resolve(`./uploads/event/${eventId}`);
   }
-
-  console.log('folderPath:', folderPath);
 
   if (!fs.existsSync(folderPath)) {
     fs.mkdirSync(folderPath, { recursive: true });
@@ -35,7 +33,10 @@ export const validateMulter = (
       cb(null, folderPath);
     },
     filename: function (req: Request, file, cb) {
-      cb(null, file.originalname);
+      const randomName = Math.random().toString(36).substring(7);
+      const ext = path.extname(file.originalname);
+      const fileName = randomName + ext;
+      cb(null, fileName);
     },
   });
 

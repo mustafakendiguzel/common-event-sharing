@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
+import { ProfilePhotoModel } from '../../file/models/file.model';
 
 @Entity('user')
 export class UserModel {
@@ -13,4 +20,9 @@ export class UserModel {
 
   @Column()
   password: string;
+
+  @OneToMany(() => ProfilePhotoModel, (profilePhoto) => profilePhoto.user, {
+    onDelete: 'CASCADE',
+  })
+  profilePhotos: ProfilePhotoModel[];
 }
