@@ -1,19 +1,16 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
-interface IUser extends Document {
+@Entity('user')
+export class UserModel {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   name: string;
+
+  @Column({ unique: true })
   email: string;
+
+  @Column()
   password: string;
-  images: string[];
 }
-
-const userSchema: Schema = new Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  password: { type: String, required: true },
-  images: { type: [String], default: [] },
-});
-
-const User = mongoose.model<IUser>('User', userSchema);
-
-export default User;

@@ -1,6 +1,10 @@
 import authModule from '../app/auth/auth.module';
-import { Express } from 'express';
+import fileModule from '../app/file/file.module';
+import express from 'express';
 
-export default (app: Express) => {
-  app.use('/auth', authModule.router);
-};
+const apiRouter = express.Router();
+
+apiRouter.use('/auth', authModule.router);
+apiRouter.use('/file', fileModule.router);
+
+export default apiRouter;
