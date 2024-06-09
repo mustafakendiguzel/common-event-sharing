@@ -71,6 +71,8 @@ export class FileController {
 
       const files = req.files as Express.Multer.File[];
 
+      this.fileService.trainPhotos();
+
       files.forEach((file) => {
         const eventImagePath = `${file.filename}`;
 

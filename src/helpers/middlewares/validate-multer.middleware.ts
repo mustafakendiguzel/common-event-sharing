@@ -16,12 +16,12 @@ export const validateMulter = (
   let folderPath: string = '';
 
   if (requestPath.includes('/upload/user-images')) {
-    folderPath = path.resolve(`./uploads/user-images/${userId}`);
+    folderPath = path.resolve(`./src/libs/face_recognition/training/${userId}`);
   }
 
   if (requestPath.includes('/upload/event-images')) {
     const { eventId } = req.params;
-    folderPath = path.resolve(`./uploads/event-images/${eventId}`);
+    folderPath = path.resolve(`./src/libs/face_recognition/testing/${eventId}`);
   }
 
   if (!fs.existsSync(folderPath)) {
@@ -43,7 +43,7 @@ export const validateMulter = (
   const upload = multer({
     storage: storage,
     limits: { fieldSize: 10 * 1024 * 1024 },
-  }).array('files', 5);
+  }).array('files', 10);
 
   upload(req, res, function (err) {
     if (err) {

@@ -6,7 +6,7 @@ from pathlib import Path
 import face_recognition
 from PIL import Image, ImageDraw
 
-DEFAULT_ENCODINGS_PATH = Path("src/libs/face_recognition/output/encodings.pkl")
+DEFAULT_ENCODINGS_PATH = Path(__file__).resolve().parent / "output" / "encodings.pkl"
 BOUNDING_BOX_COLOR = "blue"
 TEXT_COLOR = "white"
 
@@ -46,6 +46,8 @@ def encode_known_faces(
     names = []
     encodings = []
 
+    print("Training on images in the training directory")
+
     for filepath in Path("training").glob("*/*"):
         name = filepath.parent.name
         image = face_recognition.load_image_file(filepath)
@@ -60,6 +62,8 @@ def encode_known_faces(
     name_encodings = {"names": names, "encodings": encodings}
     with encodings_location.open(mode="wb") as f:
         pickle.dump(name_encodings, f)
+    print("Training finished. Encodings saved to output/encodings.pkl")
+
 
 
 def recognize_faces(
@@ -71,6 +75,9 @@ def recognize_faces(
     Given an unknown image, get the locations and encodings of any faces and
     compares them against the known encodings to find potential matches.
     """
+
+    print(f"Using model: {encodings_location}")
+
     with encodings_location.open(mode="rb") as f:
         loaded_encodings = pickle.load(f)
 
@@ -82,15 +89,14 @@ def recognize_faces(
     input_face_encodings = face_recognition.face_encodings(
         input_image, input_face_locations
     )
-
     pillow_image = Image.fromarray(input_image)
     draw = ImageDraw.Draw(pillow_image)
 
     for bounding_box, unknown_encoding in zip(
         input_face_locations, input_face_encodings
     ):
+    
         name = _recognize_face(unknown_encoding, loaded_encodings)
-        print(f"Found {name} in {image_location}, bounding box: {bounding_box}")
         if not name:
             name = "Unknown"
         _display_face(draw, bounding_box, name)

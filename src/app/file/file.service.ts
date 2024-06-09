@@ -30,9 +30,9 @@ export class FileService {
     }
   }
 
-  public async tagPhotoToEvent(eventId: string, photoId: string) {
+  public async trainPhotos() {
     exec(
-      'conda run -n py39 python  src/libs/face_recognition/detector.py --test -f src/libs/face_recognition/testing/2.jpg',
+      'python src/libs/face_recognition/detector.py --train -m="hog"',
       (error, stdout, stderr) => {
         if (error) {
           console.error(`Hata oluştu: ${error.message}`);
@@ -45,5 +45,22 @@ export class FileService {
         console.log(`Python çıktısı: ${stdout}`);
       }
     );
+  }
+
+  public async tagPhotoToEvent(eventId: string, photoId: string) {
+    const pythonScriptPath =
+      'python src/libs/face_recognition/detector.py --test -f src/libs/face_recognition/testing/1.jpeg';
+
+    exec(pythonScriptPath, { cwd: __dirname }, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Hata oluştu: ${error.message}`);
+        return;
+      }
+      if (stderr) {
+        console.error(`Hata çıktısı: ${stderr}`);
+        return;
+      }
+      console.log(`Python çıktısı: ${stdout}`);
+    });
   }
 }

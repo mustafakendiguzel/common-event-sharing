@@ -34,7 +34,10 @@ app.use(async (req, res, next) => {
 });
 
 // Static files
-app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
+app.use(
+  '/uploads',
+  express.static(path.resolve(__dirname, '../libs/face_recognition'))
+);
 
 // Routes
 app.get('/', (req: Request, res: Response) => {
