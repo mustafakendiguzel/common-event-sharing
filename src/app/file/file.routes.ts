@@ -26,6 +26,21 @@ export class FileRouter {
         verifyToken,
         this.fileController.getProfilePhoto.bind(this.fileController)
       );
+
+    router
+      .route('/upload/event-images/:eventId')
+      .post(
+        verifyToken,
+        validateMulter,
+        this.fileController.createEventPhoto.bind(this.fileController)
+      );
+
+    router
+      .route('/event-images/:fileName')
+      .get(
+        verifyToken,
+        this.fileController.getEventImagePhoto.bind(this.fileController)
+      );
     return router;
   }
 }

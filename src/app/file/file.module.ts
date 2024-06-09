@@ -1,9 +1,11 @@
+import { EventService } from '../event/event.service';
 import { FileController } from './file.controller';
 import { FileRouter } from './file.routes';
 import { FileService } from './file.service';
 
 const fileService = new FileService();
-const fileController = new FileController(fileService);
+const eventService = new EventService();
+const fileController = new FileController(fileService, eventService);
 const fileRouter = new FileRouter(fileService, fileController);
 
 export default {

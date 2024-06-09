@@ -20,8 +20,8 @@ export const validateMulter = (
   }
 
   if (requestPath.includes('/upload/event-images')) {
-    const { eventId } = req.body;
-    folderPath = path.resolve(`./uploads/event/${eventId}`);
+    const { eventId } = req.params;
+    folderPath = path.resolve(`./uploads/event-images/${eventId}`);
   }
 
   if (!fs.existsSync(folderPath)) {
