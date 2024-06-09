@@ -15,10 +15,10 @@ export class EventUserModel {
   id: string;
 
   @Column()
-  xCord: string;
+  xCord1: number;
 
   @Column()
-  yCord: string;
+  xCord2: number;
 
   @Column({ type: 'uuid', nullable: false })
   @Index()

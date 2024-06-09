@@ -30,37 +30,4 @@ export class FileService {
       throw error;
     }
   }
-
-  public async trainPhotos() {
-    exec(
-      'python src/libs/face_recognition/detector.py --train -m="hog"',
-      (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Hata oluştu: ${error.message}`);
-          return;
-        }
-        if (stderr) {
-          console.error(`Hata çıktısı: ${stderr}`);
-          return;
-        }
-        console.log(`Python çıktısı: ${stdout}`);
-      }
-    );
-  }
-  public async tagPhotoToEvent(eventId: string, photoId: string) {
-    const pythonScriptPath =
-      'python src/libs/face_recognition/detector.py --test -f src/libs/face_recognition/testing/1.jpeg';
-
-    exec(pythonScriptPath, { cwd: __dirname }, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Hata oluştu: ${error.message}`);
-        return;
-      }
-      if (stderr) {
-        console.error(`Hata çıktısı: ${stderr}`);
-        return;
-      }
-      console.log(`Python çıktısı: ${stdout}`);
-    });
-  }
 }

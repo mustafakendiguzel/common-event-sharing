@@ -2,14 +2,18 @@ import { NextFunction, Request, Response } from 'express';
 import { FileService } from './file.service';
 import path from 'path';
 import { EventService } from '../event/event.service';
+import { RabbitMqService } from '../../libs/rabbitmq/rabbitmq.service';
 
 export class FileController {
   constructor(
     private readonly fileService: FileService,
-    private readonly eventService: EventService
-  ) {}
+    private readonly eventService: EventService,
+    private readonly rabbitMqService: RabbitMqService
+  ) {
+    rabbitMqService.connectRabbitMq();
+  }
 
-  public uploadProfilePhoto(req: Request, res: Response) {
+  public async uploadProfilePhoto(req: Request, res: Response) {
     if (!req.files || req.files.length === 0) {
       return res
         .status(400)
@@ -18,8 +22,13 @@ export class FileController {
 
     const files = req.files as Express.Multer.File[];
     const { id: userId } = req.user;
+    const queueName = 'train-photos';
 
-    this.fileService.trainPhotos();
+    const queueCount = await this.rabbitMqService.checkQueueCount(queueName);
+
+    if (queueCount < 2) {
+      await this.rabbitMqService.sendToQueue(queueName, '{}');
+    }
 
     files.forEach((file) => {
       const userImagePath = `${file.filename}`;
@@ -73,13 +82,24 @@ export class FileController {
 
       const files = req.files as Express.Multer.File[];
 
-      files.forEach((file) => {
+      files.forEach(async (file) => {
         const eventImagePath = `${file.filename}`;
 
-        this.fileService.createEventPhoto({
+        const eventPhoto = await this.fileService.createEventPhoto({
           eventId,
           path: eventImagePath,
         });
+
+        const messageObject = {
+          eventId,
+          fileName: file.filename,
+          eventPhotoId: eventPhoto.id,
+        };
+
+        await this.rabbitMqService.sendToQueue(
+          'tag-photo-to-event',
+          JSON.stringify(messageObject)
+        );
       });
 
       return res.json({
@@ -92,23 +112,16 @@ export class FileController {
   }
 
   public async getEventImagePhoto(req: Request, res: Response) {
-    const { id: userId } = req.user;
     const { fileName } = req.params;
 
     const eventPhoto = await this.eventService.getEventPhotoBy({
       where: { path: fileName },
     });
 
-    const userImagePath = path.resolve(
-      `./uploads/event-images/${eventPhoto?.eventId}/${fileName}`
+    const eventImagePath = path.resolve(
+      `./src/libs/face_recognition/testing/${eventPhoto?.eventId}/${fileName}`
     );
 
-    return res.sendFile(userImagePath);
-  }
-
-  public async testImageProcessing(req: Request, res: Response) {
-    const processedImage = await this.fileService.tagPhotoToEvent('', '');
-
-    return res.json({ success: true });
+    return res.sendFile(eventImagePath);
   }
 }

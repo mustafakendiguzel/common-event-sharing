@@ -2,6 +2,8 @@ import argparse
 import pickle
 from collections import Counter
 from pathlib import Path
+import json
+
 
 import face_recognition
 from PIL import Image, ImageDraw
@@ -82,7 +84,7 @@ def recognize_faces(
     compares them against the known encodings to find potential matches.
     """
 
-    print(f"Using model: {encodings_location}")
+
 
     with encodings_location.open(mode="rb") as f:
         loaded_encodings = pickle.load(f)
@@ -96,8 +98,10 @@ def recognize_faces(
         input_image, input_face_locations
     )
     pillow_image = Image.fromarray(input_image)
-    draw = ImageDraw.Draw(pillow_image)
+    results = {'userId': [], 'xCord1': [], 'xCord2': []}
 
+    draw = ImageDraw.Draw(pillow_image)
+    
     for bounding_box, unknown_encoding in zip(
         input_face_locations, input_face_encodings
     ):
@@ -105,9 +109,22 @@ def recognize_faces(
         if not name:
             name = "Unknown"
         _display_face(draw, bounding_box, name)
+        
+
+        results['userId'].append(name)
+        results['xCord1'].append(bounding_box[1])
+        results['xCord2'].append(bounding_box[3])
+
+
+    print(json.dumps(results))
+
+
+
+    
 
     del draw
-    pillow_image.show()
+    # pillow_image.show()
+    return results
 
 
 def _recognize_face(unknown_encoding, loaded_encodings):
@@ -141,6 +158,7 @@ def _display_face(draw, bounding_box, name):
         fill=BOUNDING_BOX_COLOR,
         outline=BOUNDING_BOX_COLOR,
     )
+
     draw.text(
         (text_left, text_top),
         name,

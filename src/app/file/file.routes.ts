@@ -38,9 +38,6 @@ export class FileRouter {
         this.fileController.getEventImagePhoto.bind(this.fileController)
       );
 
-    router
-      .route('/test-image-process')
-      .get(this.fileController.testImageProcessing.bind(this.fileController));
     return router;
   }
 }

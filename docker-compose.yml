@@ -1,6 +1,16 @@
 version: '3.8'
 
 services:
+  rabbitmq:
+    image: rabbitmq:3.8-management
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=nutcracker
+      - RABBITMQ_DEFAULT_PASS=nutcracker
+    ports:
+      - '15672:15672'
+      - '5672:5672'
+
   postgresql:
     image: postgres
     restart: always

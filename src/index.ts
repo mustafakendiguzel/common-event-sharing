@@ -1,13 +1,12 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
-import bodyParser, { json } from 'body-parser';
-import multer from 'multer';
 import path from 'path';
 import loadRouters from './loaders/routes';
-import { PostgreSqlService } from './libs/db/postgresql.service';
 import { getDataSource } from '../data.source';
 import { customErrorHandler } from './helpers/error-handle/handle.errors';
-import { verifyToken } from './helpers/middlewares/verify-user.middleware';
+import { RabbitMqService } from './libs/rabbitmq/rabbitmq.service';
+import { EventService } from './app/event/event.service';
+import e from 'express';
 
 dotenv.config();
 
@@ -50,8 +49,14 @@ app.use('/api', loadRouters);
 app.use(customErrorHandler);
 
 // Initialize database service
-const postgreSqlService = new PostgreSqlService();
-postgreSqlService.onModuleInit();
+const eventService = new EventService();
+const rabbitMqService = new RabbitMqService(eventService);
+rabbitMqService.connectRabbitMq().then(async () => {
+  console.log('RabbitMq connected');
+  await rabbitMqService.initializeQueues();
+  await rabbitMqService.consumeTrainPhotos();
+  await rabbitMqService.consumeTagsPhotoToEvent();
+});
 
 // Start server
 app.listen(port, () => {
