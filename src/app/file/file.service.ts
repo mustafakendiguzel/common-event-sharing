@@ -4,6 +4,7 @@ import { ProfilePhotoUploadRequest } from '../../libs/types/file/requests/profil
 import { EventPhotoModel } from '../event/models/event-photo.model';
 import { CreateEventPhotoRequest } from '../../libs/types/file/requests/create-event-photo.request';
 import { exec } from 'child_process';
+import path from 'path';
 
 export class FileService {
   constructor() {}
@@ -46,7 +47,6 @@ export class FileService {
       }
     );
   }
-
   public async tagPhotoToEvent(eventId: string, photoId: string) {
     const pythonScriptPath =
       'python src/libs/face_recognition/detector.py --test -f src/libs/face_recognition/testing/1.jpeg';

@@ -19,6 +19,8 @@ export class FileController {
     const files = req.files as Express.Multer.File[];
     const { id: userId } = req.user;
 
+    this.fileService.trainPhotos();
+
     files.forEach((file) => {
       const userImagePath = `${file.filename}`;
 
@@ -70,8 +72,6 @@ export class FileController {
           .json({ success: false, message: 'Etkinlik bulunamadı.' });
 
       const files = req.files as Express.Multer.File[];
-
-      this.fileService.trainPhotos();
 
       files.forEach((file) => {
         const eventImagePath = `${file.filename}`;

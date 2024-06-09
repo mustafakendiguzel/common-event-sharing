@@ -55,7 +55,6 @@ def encode_known_faces(
 
     print("Training on images in the training directory")
 
-    # training klasöründeki dosyaları al
     for filepath in training_dir.glob("*/*"):
         name = filepath.parent.name
         image = face_recognition.load_image_file(filepath)
