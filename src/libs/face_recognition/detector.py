@@ -110,11 +110,11 @@ def recognize_faces(
             name = "Unknown"
         _display_face(draw, bounding_box, name)
         
+        print(bounding_box)
 
         results['userId'].append(name)
-        results['xCord1'].append(bounding_box[1])
-        results['xCord2'].append(bounding_box[3])
-
+        results['xCord1'].append(bounding_box[3])
+        results['xCord2'].append(bounding_box[1])
 
     print(json.dumps(results))
 
@@ -123,7 +123,7 @@ def recognize_faces(
     
 
     del draw
-    # pillow_image.show()
+    pillow_image.show()
     return results
 
 

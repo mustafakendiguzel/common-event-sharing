@@ -2,7 +2,6 @@ import { FindOneOptions } from 'typeorm';
 import { AppDataSource } from '../../../data.source';
 import { RegisterRequest } from '../../libs/types/auth/requests/register.request';
 import { UserModel } from './models/user.model';
-
 export class UserService {
   constructor() {}
 
