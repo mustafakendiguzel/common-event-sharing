@@ -1,14 +1,10 @@
 import express from 'express';
 import { FileController } from './file.controller';
-import { FileService } from './file.service';
 import { verifyToken } from '../../helpers/middlewares/verify-user.middleware';
 import { validateMulter } from '../../helpers/middlewares/validate-multer.middleware';
 
 export class FileRouter {
-  constructor(
-    private readonly fileService: FileService,
-    private readonly fileController: FileController
-  ) {}
+  constructor(private readonly fileController: FileController) {}
 
   getRouter() {
     const router = express.Router();
@@ -41,6 +37,10 @@ export class FileRouter {
         verifyToken,
         this.fileController.getEventImagePhoto.bind(this.fileController)
       );
+
+    router
+      .route('/test-image-process')
+      .get(this.fileController.testImageProcessing.bind(this.fileController));
     return router;
   }
 }

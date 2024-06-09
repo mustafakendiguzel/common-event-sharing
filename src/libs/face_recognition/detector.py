@@ -90,7 +90,7 @@ def recognize_faces(
         input_face_locations, input_face_encodings
     ):
         name = _recognize_face(unknown_encoding, loaded_encodings)
-        print(f"Found {name} in {image_location}")
+        print(f"Found {name} in {image_location}, bounding box: {bounding_box}")
         if not name:
             name = "Unknown"
         _display_face(draw, bounding_box, name)

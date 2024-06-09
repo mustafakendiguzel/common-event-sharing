@@ -70,7 +70,7 @@ export class FileController {
           .json({ success: false, message: 'Etkinlik bulunamadı.' });
 
       const files = req.files as Express.Multer.File[];
-      console.log('lansie', eventId);
+
       files.forEach((file) => {
         const eventImagePath = `${file.filename}`;
 
@@ -102,5 +102,11 @@ export class FileController {
     );
 
     return res.sendFile(userImagePath);
+  }
+
+  public async testImageProcessing(req: Request, res: Response) {
+    const processedImage = await this.fileService.tagPhotoToEvent('', '');
+
+    return res.json({ success: true });
   }
 }

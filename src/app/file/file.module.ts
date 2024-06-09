@@ -6,7 +6,7 @@ import { FileService } from './file.service';
 const fileService = new FileService();
 const eventService = new EventService();
 const fileController = new FileController(fileService, eventService);
-const fileRouter = new FileRouter(fileService, fileController);
+const fileRouter = new FileRouter(fileController);
 
 export default {
   service: fileService,
