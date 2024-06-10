@@ -73,15 +73,19 @@ export class RabbitMqService {
         console.log('🚀 ~ RabbitMqService ~ response:', response);
 
         response.userId.forEach(async (userId: string, index: number) => {
-          if (userId === 'Unknown' || userId === '') return;
+          if (userId === 'Unknown' || userId === '') {
+            return;
+          }
+
           await this.eventService.createEventUser({
             eventPhotoId: content.eventPhotoId,
             userId,
             xCord1: response.xCord1[index],
             xCord2: response.xCord2[index],
           });
-          this.channel.ack(message);
         });
+
+        this.channel.ack(message);
 
         console.log('🚀 ~ RabbitMqService ~ response:', response);
       } catch (err) {

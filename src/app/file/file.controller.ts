@@ -3,6 +3,7 @@ import { FileService } from './file.service';
 import path from 'path';
 import { EventService } from '../event/event.service';
 import { RabbitMqService } from '../../libs/rabbitmq/rabbitmq.service';
+import sharp from 'sharp';
 
 export class FileController {
   constructor(
@@ -84,6 +85,9 @@ export class FileController {
 
       files.forEach(async (file) => {
         const eventImagePath = `${file.filename}`;
+        const thumbnail = await sharp(file.path)
+          .resize(240, 240)
+          .toFile('./uploads/test.png');
 
         const eventPhoto = await this.fileService.createEventPhoto({
           eventId,
