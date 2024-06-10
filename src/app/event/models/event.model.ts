@@ -42,6 +42,9 @@ export class EventModel {
   isPublic: boolean;
 
   @Column({ type: 'boolean', default: false })
+  isTagProcessFinish: boolean;
+
+  @Column({ type: 'boolean', default: false })
   isArchived: boolean;
 
   @OneToMany(() => EventPhotoModel, (eventPhoto) => eventPhoto.event, {

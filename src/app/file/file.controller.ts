@@ -46,7 +46,7 @@ export class FileController {
     const { id: userId } = req.user;
     const { fileName } = req.params;
     const userImagePath = path.resolve(
-      `./uploads/user-images/${userId}/${fileName}`
+      `./src/libs/face_recognition/training/${userId}/${fileName}`
     );
 
     return res.sendFile(userImagePath);

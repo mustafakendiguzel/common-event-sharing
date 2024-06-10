@@ -83,8 +83,6 @@ export class RabbitMqService {
           this.channel.ack(message);
         });
 
-        this.channel.nack(message);
-
         console.log('🚀 ~ RabbitMqService ~ response:', response);
       } catch (err) {
         console.warn('Training failed, message will not be acked:', err);
@@ -152,7 +150,6 @@ export class RabbitMqService {
     photoName: string
   ): Promise<{ userId: string[]; xCord1: number[]; xCord2: number[] }> {
     return new Promise((resolve, reject) => {
-      console.log(__dirname);
       const pythonScriptPath = `python src/libs/face_recognition/detector.py --test -f src/libs/face_recognition/testing/${eventId}/${photoName}`;
 
       exec(pythonScriptPath, (error, stdout, stderr) => {
