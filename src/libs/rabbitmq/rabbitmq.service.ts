@@ -82,6 +82,8 @@ export class RabbitMqService {
             userId,
             xCord1: response.xCord1[index],
             xCord2: response.xCord2[index],
+            yCord1: response.yCord1[index],
+            yCord2: response.yCord2[index],
           });
         });
 
@@ -156,7 +158,13 @@ export class RabbitMqService {
   public async tagPhotoToEvent(
     eventId: string,
     photoName: string
-  ): Promise<{ userId: string[]; xCord1: number[]; xCord2: number[] }> {
+  ): Promise<{
+    userId: string[];
+    xCord1: number[];
+    xCord2: number[];
+    yCord1: number[];
+    yCord2: number[];
+  }> {
     return new Promise((resolve, reject) => {
       const pythonScriptPath = `python3 src/libs/face_recognition/detector.py --test -f src/libs/face_recognition/testing/${eventId}/${photoName}`;
 

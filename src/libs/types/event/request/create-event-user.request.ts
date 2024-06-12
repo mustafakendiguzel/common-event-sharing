@@ -8,6 +8,12 @@ export class CreateEventUserRequest {
   @IsNumber()
   xCord2: number;
 
+  @IsNumber()
+  yCord1: number;
+
+  @IsNumber()
+  yCord2: number;
+
   @IsString()
   eventPhotoId: string;
 
