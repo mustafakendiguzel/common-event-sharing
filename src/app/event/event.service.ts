@@ -60,4 +60,12 @@ export class EventService {
       throw error;
     }
   }
+
+  public async updateEvent(eventId: string, data: Partial<EventModel>) {
+    try {
+      return await this.eventRepository.update(eventId, data);
+    } catch (error) {
+      throw error;
+    }
+  }
 }

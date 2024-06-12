@@ -85,6 +85,10 @@ export class RabbitMqService {
           });
         });
 
+        await this.eventService.updateEvent(content.eventId, {
+          isTagProcessFinish: true,
+        });
+
         this.channel.ack(message);
 
         console.log('🚀 ~ RabbitMqService ~ response:', response);
