@@ -25,11 +25,10 @@ export class EventService {
     }
   }
 
-  public async getEvents(publisherId: string) {
+  public async getEvents() {
     try {
       return await this.eventRepository.find({
-        where: { publisherId },
-        relations: { eventPhotos: { eventUsers: true } },
+        relations: { publisher: true, eventPhotos: { eventUsers: true } },
       });
     } catch (error) {
       throw error;

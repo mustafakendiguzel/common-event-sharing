@@ -18,7 +18,7 @@ export class UserModel {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @OneToMany(() => ProfilePhotoModel, (profilePhoto) => profilePhoto.user, {

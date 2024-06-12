@@ -7,18 +7,23 @@ export class EventController {
   public async createEvent(req: Request, res: Response) {
     const { id: userId } = req.user;
 
-    await this.eventService.createEvent({ ...req.body, publisherId: userId });
+    const { id } = await this.eventService.createEvent({
+      ...req.body,
+      publisherId: userId,
+    });
 
     return res.json({
       success: true,
-      message: 'Etkinlik başarıyla oluşturuldu.',
+      data: {
+        event: { id },
+      },
     });
   }
 
   public async getEvents(req: Request, res: Response) {
     const { id: userId } = req.user;
 
-    const events = await this.eventService.getEvents(userId);
+    const events = await this.eventService.getEvents();
 
     return res.json({ success: true, data: events });
   }
