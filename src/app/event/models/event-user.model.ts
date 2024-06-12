@@ -20,6 +20,12 @@ export class EventUserModel {
   @Column()
   xCord2: number;
 
+  @Column()
+  yCord: number;
+
+  @Column()
+  yCord2: number;
+
   @Column({ type: 'uuid', nullable: false })
   @Index()
   eventPhotoId: string;

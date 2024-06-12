@@ -98,7 +98,7 @@ def recognize_faces(
         input_image, input_face_locations
     )
     pillow_image = Image.fromarray(input_image)
-    results = {'userId': [], 'xCord1': [], 'xCord2': []}
+    results = {'userId': [], 'xCord1': [], 'xCord2': [], 'yCord1': [], 'yCord2': []}
 
     draw = ImageDraw.Draw(pillow_image)
     
@@ -111,8 +111,10 @@ def recognize_faces(
         _display_face(draw, bounding_box, name)
         
         results['userId'].append(name)
-        results['xCord1'].append(bounding_box[3])
-        results['xCord2'].append(bounding_box[1])
+        results['xCord1'].append(bounding_box[1])
+        results['xCord2'].append(bounding_box[3])
+        results['xCord1'].append(bounding_box[0])
+        results['xCord2'].append(bounding_box[2])
 
     print(json.dumps(results))
 

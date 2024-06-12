@@ -11,7 +11,7 @@ export class UserController {
   public async getUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { userId } = req.params;
-      const { id: publisherId } = req.user;
+      const { id: currentUserId } = req.user;
 
       const user = await this.userService.findOneBy({
         where: { id: userId },
@@ -23,7 +23,7 @@ export class UserController {
       const events = await this.eventService.getEventBy({
         where: [
           { publisherId: userId, isPublic: true },
-          { isPublic: false, publisherId },
+          { publisherId: currentUserId },
         ],
         relations: { publisher: true, eventPhotos: { eventUsers: true } },
       });
