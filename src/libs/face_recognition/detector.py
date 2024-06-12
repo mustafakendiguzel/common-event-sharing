@@ -113,8 +113,8 @@ def recognize_faces(
         results['userId'].append(name)
         results['xCord1'].append(bounding_box[1])
         results['xCord2'].append(bounding_box[3])
-        results['xCord1'].append(bounding_box[2])
-        results['xCord2'].append(bounding_box[4])
+        results['yCord1'].append(bounding_box[0])
+        results['yCord2'].append(bounding_box[2])
 
     print(json.dumps(results))
 
