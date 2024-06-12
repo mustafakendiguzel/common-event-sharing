@@ -21,7 +21,7 @@ export class EventUserModel {
   xCord2: number;
 
   @Column()
-  yCord: number;
+  yCord1: number;
 
   @Column()
   yCord2: number;
