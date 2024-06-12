@@ -6,6 +6,7 @@ import {
   Unique,
 } from 'typeorm';
 import { ProfilePhotoModel } from '../../file/models/file.model';
+import { Exclude } from 'class-transformer';
 
 @Entity('user')
 export class UserModel {
@@ -18,7 +19,8 @@ export class UserModel {
   @Column({ unique: true })
   email: string;
 
-  @Column({ select: false })
+  @Column()
+  @Exclude()
   password: string;
 
   @OneToMany(() => ProfilePhotoModel, (profilePhoto) => profilePhoto.user, {
