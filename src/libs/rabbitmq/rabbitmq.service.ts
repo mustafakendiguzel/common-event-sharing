@@ -130,7 +130,7 @@ export class RabbitMqService {
     return new Promise<void>((resolve, reject) => {
       console.log(' [x] Training photos on node.js side');
       exec(
-        'python src/libs/face_recognition/detector.py --train -m="hog"',
+        'python3 src/libs/face_recognition/detector.py --train -m="hog"',
         (error, stdout, stderr) => {
           if (error) {
             console.error(`Hata oluştu: ${error.message}`);
@@ -154,7 +154,7 @@ export class RabbitMqService {
     photoName: string
   ): Promise<{ userId: string[]; xCord1: number[]; xCord2: number[] }> {
     return new Promise((resolve, reject) => {
-      const pythonScriptPath = `python src/libs/face_recognition/detector.py --test -f src/libs/face_recognition/testing/${eventId}/${photoName}`;
+      const pythonScriptPath = `python3 src/libs/face_recognition/detector.py --test -f src/libs/face_recognition/testing/${eventId}/${photoName}`;
 
       exec(pythonScriptPath, (error, stdout, stderr) => {
         if (error) {
