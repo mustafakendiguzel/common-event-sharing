@@ -22,12 +22,8 @@ export class EventController {
 
   public async getEvents(req: Request, res: Response) {
     const { id: userId } = req.user;
-    const { getMe } = req.query;
 
-    const events = await this.eventService.getEvents(
-      userId,
-      getMe == undefined ? false : true
-    );
+    const events = await this.eventService.getEvents(userId);
 
     return res.json({ success: true, data: events });
   }

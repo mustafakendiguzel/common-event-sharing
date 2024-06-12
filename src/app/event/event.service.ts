@@ -25,17 +25,10 @@ export class EventService {
     }
   }
 
-  public async getEvents(publisherId: string, getMe: boolean = false) {
-    let whereQuery = null;
-
-    if (getMe) {
-      whereQuery = { publisherId };
-    } else {
-      whereQuery = [{ publisherId, isPublic: false }, { isPublic: true }];
-    }
+  public async getEvents(publisherId: string) {
     try {
       return await this.eventRepository.find({
-        where: whereQuery,
+        where: [{ publisherId, isPublic: false }, { isPublic: true }],
         relations: { publisher: true, eventPhotos: { eventUsers: true } },
       });
     } catch (error) {
