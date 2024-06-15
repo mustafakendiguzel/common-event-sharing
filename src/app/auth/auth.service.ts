@@ -53,7 +53,7 @@ export class AuthService {
       expiresIn: this.JWT_EXPIRES_IN,
     });
 
-    return { accessToken: token };
+    return { accessToken: token, userId: user.id };
   }
 
   async getMe(id: string) {
