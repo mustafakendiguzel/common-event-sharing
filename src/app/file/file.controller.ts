@@ -44,7 +44,7 @@ export class FileController {
   }
 
   public getProfilePhoto(req: Request, res: Response) {
-    const { id: userId } = req.user;
+    const { userId } = req.params;
     const { fileName } = req.params;
     const userImagePath = path.resolve(
       `./src/libs/face_recognition/training/${userId}/${fileName}`

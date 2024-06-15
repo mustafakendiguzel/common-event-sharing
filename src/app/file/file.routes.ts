@@ -17,7 +17,7 @@ export class FileRouter {
       );
 
     router
-      .route('/user-images/:fileName')
+      .route('/user-images/:userId/:fileName')
       .get(
         verifyToken,
         this.fileController.getProfilePhoto.bind(this.fileController)
