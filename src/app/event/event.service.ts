@@ -38,7 +38,7 @@ export class EventService {
 
   public async getEventBy(findOneOptions: FindOneOptions<EventModel>) {
     try {
-      return await this.eventRepository.findOne(findOneOptions);
+      return await this.eventRepository.find(findOneOptions);
     } catch (error) {
       throw error;
     }
