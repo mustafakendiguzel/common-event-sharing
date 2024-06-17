@@ -35,7 +35,8 @@ export const validateMulter = (
     filename: function (req: Request, file, cb) {
       const randomName = Math.random().toString(36).substring(7);
       const ext = path.extname(file.originalname);
-      const fileName = randomName + ext;
+      const fileName = randomName + '.jpeg';
+      console.log('Dosya adı:', fileName);
       cb(null, fileName);
     },
   });

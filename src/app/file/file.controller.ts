@@ -85,9 +85,7 @@ export class FileController {
 
       files.forEach(async (file) => {
         const eventImagePath = `${file.filename}`;
-        const thumbnail = await sharp(file.path)
-          .resize(240, 240)
-          .toFile('./uploads/test.png');
+
 
         const eventPhoto = await this.fileService.createEventPhoto({
           eventId,
