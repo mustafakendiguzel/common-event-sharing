@@ -108,10 +108,10 @@ def recognize_faces(
         results['yCord1'].append(bounding_box[0])
         results['yCord2'].append(bounding_box[2])
 
-    # print(json.dumps(results))
+    print(json.dumps(results))
 
     del draw
-    pillow_image.show()
+    # pillow_image.show()
 
 
 def _recognize_face(unknown_encoding, loaded_encodings):
