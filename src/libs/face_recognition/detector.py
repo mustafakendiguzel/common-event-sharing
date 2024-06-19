@@ -65,6 +65,8 @@ def encode_known_faces(
     name_encodings = {"names": names, "encodings": encodings}
     with encodings_location.open(mode="wb") as f:
         pickle.dump(name_encodings, f)
+    
+    print("Training is done!")
 
 
 def recognize_faces(
