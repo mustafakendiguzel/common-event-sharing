@@ -114,7 +114,7 @@ def recognize_faces(
     print(json.dumps(results))
 
     del draw
-    pillow_image.show()
+    # pillow_image.show()
 
 
 def _recognize_face(unknown_encoding, loaded_encodings):
