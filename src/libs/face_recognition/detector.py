@@ -5,10 +5,10 @@ from pathlib import Path
 import image_to_numpy
 import json
 
-
 import face_recognition
 from PIL import Image, ImageDraw
 
+# Default encodings path
 DEFAULT_ENCODINGS_PATH = Path(__file__).resolve().parent / "output" / "encodings.pkl"
 
 BOUNDING_BOX_COLOR = "blue"
@@ -19,15 +19,15 @@ training_dir = Path(__file__).resolve().parent / "training"
 output_dir = Path(__file__).resolve().parent / "output"
 validation_dir = Path(__file__).resolve().parent / "validation"
 
+# Klasörleri oluştur (varsa geç)
+training_dir.mkdir(parents=True, exist_ok=True)
+output_dir.mkdir(parents=True, exist_ok=True)
+validation_dir.mkdir(parents=True, exist_ok=True)
 
 parser = argparse.ArgumentParser(description="Recognize faces in an image")
 parser.add_argument("--train", action="store_true", help="Train on input data")
-parser.add_argument(
-    "--validate", action="store_true", help="Validate trained model"
-)
-parser.add_argument(
-    "--test", action="store_true", help="Test the model with an unknown image"
-)
+parser.add_argument("--validate", action="store_true", help="Validate trained model")
+parser.add_argument("--test", action="store_true", help="Test the model with an unknown image")
 parser.add_argument(
     "-m",
     action="store",
@@ -51,7 +51,9 @@ def encode_known_faces(
     names = []
     encodings = []
 
-    for filepath in Path("training").glob("*/*"):
+    print("Training on images in the training directory")
+
+    for filepath in training_dir.glob("*/*"):
         name = filepath.parent.name
         image = image_to_numpy.load_image_file(filepath)
 
@@ -65,8 +67,8 @@ def encode_known_faces(
     name_encodings = {"names": names, "encodings": encodings}
     with encodings_location.open(mode="wb") as f:
         pickle.dump(name_encodings, f)
-    
-    print("Training is done!")
+
+    print(f"Training finished. Encodings saved to {encodings_location}")
 
 
 def recognize_faces(
@@ -78,6 +80,7 @@ def recognize_faces(
     Given an unknown image, get the locations and encodings of any faces and
     compares them against the known encodings to find potential matches.
     """
+
     with encodings_location.open(mode="rb") as f:
         loaded_encodings = pickle.load(f)
 
@@ -91,8 +94,8 @@ def recognize_faces(
     )
 
     pillow_image = Image.fromarray(input_image)
-    results = {'userId': [], 'xCord1': [], 'xCord2': [], 'yCord1': [], 'yCord2': []}
     draw = ImageDraw.Draw(pillow_image)
+    results = {'userId': [], 'xCord1': [], 'xCord2': [], 'yCord1': [], 'yCord2': []}
 
     for bounding_box, unknown_encoding in zip(
         input_face_locations, input_face_encodings
@@ -111,7 +114,7 @@ def recognize_faces(
     print(json.dumps(results))
 
     del draw
-    # pillow_image.show()
+    pillow_image.show()
 
 
 def _recognize_face(unknown_encoding, loaded_encodings):
@@ -129,6 +132,7 @@ def _recognize_face(unknown_encoding, loaded_encodings):
     )
     if votes:
         return votes.most_common(1)[0][0]
+    return None
 
 
 def _display_face(draw, bounding_box, name):
@@ -157,7 +161,7 @@ def validate(model: str = "hog"):
     Runs recognize_faces on a set of images with known faces to validate
     known encodings.
     """
-    for filepath in Path("validation").rglob("*"):
+    for filepath in validation_dir.glob("*"):
         if filepath.is_file():
             recognize_faces(
                 image_location=str(filepath.absolute()), model=model
