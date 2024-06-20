@@ -37,7 +37,7 @@ export const validateMulter = (
   }).array('files', 10);
 
   
-  upload(req, res, function (err) {
+  upload(req, res, async function (err) {
     if (err) {
       console.error('Dosya yükleme hatası:', err);
 
@@ -45,11 +45,29 @@ export const validateMulter = (
         .status(500)
         .json({ success: false, message: 'Dosya yükleme hatası.' });
     }
-    (req.files as Express.Multer.File[]).forEach(file => {
-      const randomName = Math.random().toString(36).substring(7);
-      const randomFileName = file.filename = randomName + '.jpeg';
-      sharp(file.buffer).resize(350, 450).rotate().toFile(folderPath + '/' + randomFileName);
-    });
-    next();
+
+    try {
+      // Tüm dosyaları asenkron olarak işle
+      await Promise.all(
+        (req.files as Express.Multer.File[]).map(async file => {
+          const randomName = Math.random().toString(36).substring(7);
+          const randomFileName = file.filename = randomName + '.jpeg';
+
+          // Sharp ile işlemleri asenkron olarak yap
+          await sharp(file.buffer)
+            .resize(350, 450)
+            .rotate() // Exif meta verilerine göre döndürme işlemi
+            .toFile(folderPath + '/' + randomFileName);
+        })
+      );
+
+      next(); // İşlem tamamlandıktan sonra bir sonraki middleware'e geç
+    } catch (err) {
+      console.error('Dosya işleme hatası:', err);
+      return res
+        .status(500)
+        .json({ success: false, message: 'Dosya işleme hatası.' });
+    }
   });
+  
 };
