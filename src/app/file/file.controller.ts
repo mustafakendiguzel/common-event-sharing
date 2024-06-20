@@ -33,6 +33,7 @@ export class FileController {
 
     files.forEach((file) => {
       const userImagePath = `${file.filename}`;
+      console.log(file.filename)
 
       this.fileService.uploadProfilePhoto({
         userId,
@@ -85,8 +86,6 @@ export class FileController {
 
       files.forEach(async (file) => {
         const eventImagePath = `${file.filename}`;
-
-
         const eventPhoto = await this.fileService.createEventPhoto({
           eventId,
           path: eventImagePath,

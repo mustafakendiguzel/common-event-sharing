@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
+import sharp from 'sharp';
 
 export const validateMulter = (
   req: Request,
@@ -28,31 +29,27 @@ export const validateMulter = (
     fs.mkdirSync(folderPath, { recursive: true });
   }
 
-  const storage = multer.diskStorage({
-    destination: function (req: Request, file, cb) {
-      cb(null, folderPath);
-    },
-    filename: function (req: Request, file, cb) {
-      const randomName = Math.random().toString(36).substring(7);
-      const ext = path.extname(file.originalname);
-      const fileName = randomName + '.jpeg';
-      console.log('Dosya adı:', fileName);
-      cb(null, fileName);
-    },
-  });
+  const storage = multer.memoryStorage();
 
   const upload = multer({
     storage: storage,
     limits: { fieldSize: 10 * 1024 * 1024 },
   }).array('files', 10);
 
+  
   upload(req, res, function (err) {
     if (err) {
       console.error('Dosya yükleme hatası:', err);
+
       return res
         .status(500)
         .json({ success: false, message: 'Dosya yükleme hatası.' });
     }
+    (req.files as Express.Multer.File[]).forEach(file => {
+      const randomName = Math.random().toString(36).substring(7);
+      const randomFileName = file.filename = randomName + '.jpeg';
+      sharp(file.buffer).resize(350, 450).rotate().toFile(folderPath + '/' + randomFileName);
+    });
     next();
   });
 };
