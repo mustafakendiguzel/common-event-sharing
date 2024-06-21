@@ -55,7 +55,7 @@ export class RabbitMqService {
   }
 
   public async handleTagsPhotoEventMessage(
-    message: amqp.ConsumeMessage | null
+    message: any
   ) {
     if (message) {
       console.log(" [x] Received '%s'", JSON.parse(message.content.toString()));
@@ -63,9 +63,19 @@ export class RabbitMqService {
         eventId: string;
         fileName: string;
         eventPhotoId: string;
+        isForPhotoTraining?: boolean;
       } = JSON.parse(message.content.toString());
 
       try {
+        const queueCount = await this.checkQueueCount(queues[0]);
+
+        if (queueCount > 0) {
+          console.log(`Waiting for ${queueCount} messages in train-photos queue to be processed before tagging.`);
+          setTimeout(() => this.consumeTagsPhotoToEvent(), 5000); // 5 saniye bekle ve tekrar kontrol et
+          return; 
+        }
+      
+
         const response = await this.tagPhotoToEvent(
           content.eventId,
           content.fileName
