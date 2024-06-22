@@ -35,4 +35,12 @@ export class EventController {
 
     return res.json({ success: true });
   }
+
+  public async deleteEventPhoto(req: Request, res: Response) {
+    const { eventId, eventPhotoId } = req.params;
+
+    await this.eventService.deleteEventPhoto(eventPhotoId);
+
+    return res.json({ success: true });
+  }
 }

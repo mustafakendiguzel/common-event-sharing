@@ -77,4 +77,12 @@ export class EventService {
       throw error;
     }
   }
+
+  public async deleteEventPhoto(eventPhotoId: string) {
+    try {
+      return await this.eventPhotoRepository.delete(eventPhotoId);
+    } catch (error) {
+      throw error;
+    }
+  }
 }
