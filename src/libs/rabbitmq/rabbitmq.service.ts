@@ -146,7 +146,7 @@ export class RabbitMqService {
     return new Promise<void>((resolve, reject) => {
       console.log(' [x] Training photos on node.js side');
       exec(
-        'python3 src/libs/face_recognition/detector.py --train -m="cnn"',
+        'python3 src/libs/face_recognition/detector.py --train -m="hog"',
         (error, stdout, stderr) => {
           if (error) {
             console.error(`Hata oluştu: ${error.message}`);
