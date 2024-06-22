@@ -27,15 +27,15 @@ export class EventRouter {
         this.eventController.getEvents.bind(this.eventController)
     );
     
-    router.route('original/:eventId')
+    router.route('/original/:eventId')
       .delete(
         verifyToken,
         this.eventController.deleteEvent.bind(this.eventController));
     
-    router.route('eventPhoto/:eventPhotoId')
+    router.route('/eventPhoto/:eventPhotoId')
       .delete(
         verifyToken,
-        this.eventController.deleteEvent.bind(this.eventController));
+        this.eventController.deleteEventPhoto.bind(this.eventController));
 
     return router;
   }
