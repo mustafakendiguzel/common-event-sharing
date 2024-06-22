@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
     "start": "yarn build && node dist/index.js",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "db:diagram": "ts-node ./node_modules/.bin/typeorm-uml ormconfig.json"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +28,8 @@
     "multer": "^1.4.5-lts.1",
     "pg": "^8.11.5",
     "sharp": "^0.33.4",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "typeorm-uml": "^1.6.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
