@@ -69,4 +69,12 @@ export class EventService {
       throw error;
     }
   }
+
+  public async deleteEvent(eventId: string) {
+    try {
+      return await this.eventRepository.delete(eventId);
+    } catch (error) {
+      throw error;
+    }
+  }
 }

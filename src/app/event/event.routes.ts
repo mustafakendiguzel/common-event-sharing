@@ -25,7 +25,12 @@ export class EventRouter {
       .get(
         verifyToken,
         this.eventController.getEvents.bind(this.eventController)
-      );
+    );
+    
+    router.route('/:eventId')
+      .delete(
+        verifyToken,
+        this.eventController.deleteEvent.bind(this.eventController));
 
     return router;
   }

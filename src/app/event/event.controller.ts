@@ -27,4 +27,12 @@ export class EventController {
 
     return res.json({ success: true, data: events });
   }
+
+  public async deleteEvent(req: Request, res: Response) {
+    const { eventId } = req.params;
+
+    await this.eventService.deleteEvent(eventId);
+
+    return res.json({ success: true });
+  }
 }
